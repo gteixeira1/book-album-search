@@ -1,7 +1,9 @@
 package com.kramphub.controller;
 
+import com.kramphub.domain.albums.Album;
 import com.kramphub.domain.books.Book;
 import com.kramphub.service.GoogleBooksService;
+import com.kramphub.service.ITunesAlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,9 @@ public class BookAlbumSearchController {
     @Autowired
     private GoogleBooksService googleBooksService;
 
+    @Autowired
+    private ITunesAlbumService iTunesAlbumService;
+
     @RequestMapping(path = "/book-album", method = RequestMethod.GET, params = {"searchKey!="})
     public ResponseEntity<Object> getBookAlbum(@RequestParam("searchKey") String searchKey){
 
@@ -35,8 +40,8 @@ public class BookAlbumSearchController {
 
     @RequestMapping(path = "/albums", method = RequestMethod.GET, params = {"searchKey!="})
     @Profile("dev")
-    public ResponseEntity<Object> getAlbums(@RequestParam("searchKey") String searchKey){
+    public ResponseEntity<List<Album>> getAlbums(@RequestParam("searchKey") String searchKey){
 
-        return new ResponseEntity<>("Response OK", HttpStatus.OK);
+        return new ResponseEntity<List<Album>>(iTunesAlbumService.searchAlbums(searchKey), HttpStatus.OK);
     }
 }

@@ -1,4 +1,3 @@
-
 package com.kramphub.domain.books;
 
 import java.util.HashMap;

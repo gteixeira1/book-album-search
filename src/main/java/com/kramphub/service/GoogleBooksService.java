@@ -16,9 +16,6 @@ public class GoogleBooksService {
     @Value("${google.book.api.url}")
     private String googleBookApiURL;
 
-    @Value("${google.book.api.maxResults}")
-    private String maxResults;
-
     @Autowired
     private RestTemplate restTemplate;
 
