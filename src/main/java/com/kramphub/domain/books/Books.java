@@ -11,17 +11,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({
-        "kind",
-        "totalItems"
-})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Books {
 
     @JsonProperty("items")
     private List<Book> books = null;
-
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("items")
     public List<Book> getBooks() {
@@ -31,16 +25,6 @@ public class Books {
     @JsonProperty("items")
     public void setBooks(List<Book> books) {
         this.books = books;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }

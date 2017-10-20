@@ -11,28 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({
-        "subtitle",
-        "publishedDate",
-        "industryIdentifiers",
-        "readingModes",
-        "pageCount",
-        "printType",
-        "categories",
-        "averageRating",
-        "ratingsCount",
-        "maturityRating",
-        "allowAnonLogging",
-        "contentVersion",
-        "imageLinks",
-        "language",
-        "previewLink",
-        "infoLink",
-        "canonicalVolumeLink",
-        "publisher",
-        "panelizationSummary",
-        "description"
-})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class VolumeInfo {
 
     @JsonProperty("title")
@@ -40,9 +19,6 @@ public class VolumeInfo {
 
     @JsonProperty("authors")
     private List<String> authors = null;
-
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("title")
     public String getTitle() {
@@ -62,16 +38,6 @@ public class VolumeInfo {
     @JsonProperty("authors")
     public void setAuthors(List<String> authors) {
         this.authors = authors;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }
