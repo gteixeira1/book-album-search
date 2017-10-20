@@ -1,6 +1,6 @@
 package com.kramphub.model;
 
-public class BookModel extends Item {
+public class BookModel extends ItemModel {
 
     private String author;
 

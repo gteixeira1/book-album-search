@@ -1,6 +1,6 @@
 package com.kramphub.model;
 
-public class AlbumModel extends Item {
+public class AlbumModel extends ItemModel {
 
     private String artist;
 
