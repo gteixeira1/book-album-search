@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +30,7 @@ public class ITunesAlbumService {
 
     private static final Logger log = LoggerFactory.getLogger(ITunesAlbumService.class);
 
-    public List<AlbumModel> searchAlbums(String searchKey){
+    public List<AlbumModel> searchAlbums(String searchKey, CountDownLatch latch){
         long startTime = System.nanoTime();
         log.info(String.format("Started searchAlbums at %s.", LocalDateTime.now()));
 
@@ -50,6 +51,7 @@ public class ITunesAlbumService {
 
         log.info(String.format("Finished searchAlbums at %s. Executed in %s millis.",
                 LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
+        latch.countDown();
 
         return response;
     }

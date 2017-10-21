@@ -1,10 +1,13 @@
 package com.kramphub.config;
 
+import com.kramphub.executor.ServiceExecutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.concurrent.CountDownLatch;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -23,6 +26,11 @@ public class ApplicationConfiguration {
         client.setConnectTimeout(connectTimeout);
         client.setReadTimeout(readTimeout);
         return restTemplate;
+    }
+
+    @Bean
+    public ServiceExecutor getServiceExecutor(){
+        return new ServiceExecutor();
     }
 
 }

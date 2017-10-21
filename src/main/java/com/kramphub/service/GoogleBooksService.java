@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +27,7 @@ public class GoogleBooksService {
 
     private static final Logger log = LoggerFactory.getLogger(GoogleBooksService.class);
 
-    public List<BookModel> searchBooks(String searchKey){
+    public List<BookModel> searchBooks(String searchKey, CountDownLatch latch){
         long startTime = System.nanoTime();
         log.info(String.format("Started searchBooks at %s.", LocalDateTime.now()));
 
@@ -40,6 +41,7 @@ public class GoogleBooksService {
 
         log.info(String.format("Finished searchBooks at %s. Executed in %s millis.",
                 LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
+        latch.countDown();
 
         return response;
     }
