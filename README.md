@@ -81,6 +81,15 @@ java -jar -Dspring.profiles.active=prod target/book-album-search-0.0.1-SNAPSHOT.
 * http://localhost:8080/book-album-search/api/v1/books?searchKey=Hitchhiker%27s%20Guide
 * http://localhost:8080/book-album-search/api/v1/books?searchKey=Uncharted
 
+### Health Check Endpoints
+It was included in the project the Actuators dependency to have some pre-defined health checks endpoints.
+For **dev** and **qa** environment, all actuators health checks endpoints are available ([reference](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html)).
+For **prod**, only bellow endpoints are available (configurable on application.properties)
+* http://localhost:8080/health
+* http://localhost:8080/info
+* http://localhost:8080/trace
+* http://localhost:8080/loggers
+
 ### Justification of Technology Choice
 It was decided to use **Spring Boot** framework for this application because it's very simple to use and implement REST service.
 Spring Boot has a embedded container which we can easily start a HTTP endpoint.
