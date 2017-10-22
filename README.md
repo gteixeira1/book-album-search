@@ -40,13 +40,13 @@ java -jar target/book-album-search-0.0.1-SNAPSHOT.jar
 - URI Parameters: searchKey (required)
 
 ##### Search Books
-- Endpoint which perform the only search books (only available on DEV environment)
+- Endpoint which perform only the search of books (only available on DEV environment)
 - URL: http://localhost:8080/book-album-search/api/v1/books?searchKey=jones
 - Method: GET
 - URI Parameters: searchKey (required)
 
 ##### Search Book/Album
-- Endpoint which perform the only search albums (only available on DEV environment)
+- Endpoint which perform only the search of albums (only available on DEV environment)
 - URL: http://localhost:8080/book-album-search/api/v1/albums?searchKey=jones
 - Method: GET
 - URI Parameters: searchKey (required)
