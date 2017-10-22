@@ -23,30 +23,30 @@ mvn clean install
 ```
 The application has specific properties separated per environment (dev, qa, prod). The default environment is dev.
 To start the application, you just need to run the spring-boot::run with environment information with maven command.
-Start for (*dev*) environment (default):
+Start for **dev** environment (default):
 ```sh
 mvn spring-boot::run
 ```
-Start for (*qa*) environment:
+Start for **qa** environment:
 ```sh
 mvn spring-boot::run -Drun.jvmArguments="-Dspring.profiles.active=qa"
 ```
-Start for (*prod*) environment:
+Start for **prod** environment:
 ```sh
 mvn spring-boot::run -Drun.jvmArguments="-Dspring.profiles.active=prod"
 ```
 You can also use the JAR file created by build command and start the application using a Java command.
 After the build has successfully executed, a new JAR (*book-album-search-0.0.1-SNAPSHOT.jar*) file will be created inside *'target'*.
 Then, to start the application using Java command, you just need to run the command.
-Start for (*dev*) environment (default):
+Start for **dev** environment (default):
 ```sh
 java -jar target/book-album-search-0.0.1-SNAPSHOT.jar
 ```
-Start for (*qa*):
+Start for **qa**:
 ```sh
 java -jar -Dspring.profiles.active=qa target/book-album-search-0.0.1-SNAPSHOT.jar
 ```
-Start for (*prod*):
+Start for **prod**:
 ```sh
 java -jar -Dspring.profiles.active=prod target/book-album-search-0.0.1-SNAPSHOT.jar
 ```
@@ -82,7 +82,7 @@ java -jar -Dspring.profiles.active=prod target/book-album-search-0.0.1-SNAPSHOT.
 * http://localhost:8080/book-album-search/api/v1/books?searchKey=Uncharted
 
 ### Justification of Technology Choice
-It was decided to use (*Spring Boot*) framework for this application because it's very simple to use and implement REST service.
+It was decided to use **Spring Boot** framework for this application because it's very simple to use and implement REST service.
 Spring Boot has a embedded container which we can easily start a HTTP endpoint.
 Also, I'm already working with Spring Boot and for this reason I' very familiar with this framework.
 
