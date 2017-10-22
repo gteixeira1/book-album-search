@@ -5,6 +5,7 @@ import com.kramphub.domain.books.Book;
 import com.kramphub.model.AlbumModel;
 import com.kramphub.model.BookModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,10 @@ public class BookAlbumUtil {
 
     public static BookModel convertBookToBookModel(Book book){
         BookModel bookModel = new BookModel();
-        List<String> authors = book.getVolumeInfo().getAuthors();
+        List<String> authors = new ArrayList<>();
+        if ( book.getVolumeInfo() != null && book.getVolumeInfo().getAuthors() != null ) {
+            authors = book.getVolumeInfo().getAuthors();
+        }
         bookModel.setAuthor(authors.stream().collect(Collectors.joining(", ")));
         bookModel.setTitle(book.getVolumeInfo().getTitle());
         bookModel.setKind(book.getKind());

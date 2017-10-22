@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.IntStream;
 
 @Service
 public class ServiceExecutor {
@@ -45,15 +46,7 @@ public class ServiceExecutor {
                 () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(album -> itemModelList.add(album))
         ).start();
 
-        new Timer().schedule(
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        latch.countDown();
-                        latch.countDown();
-                    }
-                }, appMaxResponseTime
-        );
+        startTimerScheduler(latch,2);
 
         log.info("Waiting all threads finish.");
         try {
@@ -72,10 +65,20 @@ public class ServiceExecutor {
     }
 
     public List<BookModel> searchBookThread(String searchKey, CountDownLatch latch){
+        long startTime = System.nanoTime();
+        log.info(String.format("Started searchBookThread at %s.", LocalDateTime.now()));
+
         List<BookModel> bookModelList = new ArrayList<>();
         new Thread(
                 () -> googleBookService.searchBooks(searchKey, latch).stream().forEach(book -> bookModelList.add(book))
         ).start();
+
+        startTimerScheduler(latch,1);
+        startCountDownLatch(latch);
+
+        log.info(String.format("Finished searchBookThread at %s. Executed in %s millis.",
+                LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
+
         return bookModelList;
     }
 
@@ -88,10 +91,32 @@ public class ServiceExecutor {
                 () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(album -> albumModelList.add(album))
         ).start();
 
+        startTimerScheduler(latch,1);
+        startCountDownLatch(latch);
+
         log.info(String.format("Finished searchAlbumThread at %s. Executed in %s millis.",
                 LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
 
         return albumModelList;
+    }
+
+    private void startTimerScheduler(CountDownLatch latch, int threadCount){
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        IntStream.range(0,threadCount).forEach(i -> latch.countDown());
+                    }
+                }, appMaxResponseTime
+        );
+    }
+
+    private void startCountDownLatch(CountDownLatch latch){
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            log.error("Error on CountDownLatch.await. {}", e.getCause());
+        }
     }
 
 }
