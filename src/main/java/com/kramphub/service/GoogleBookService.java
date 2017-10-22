@@ -2,7 +2,7 @@ package com.kramphub.service;
 
 import com.kramphub.domain.books.Books;
 import com.kramphub.model.BookModel;
-import com.kramphub.utils.BookAlbumUtils;
+import com.kramphub.util.BookAlbumUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 @Service
-public class GoogleBooksService {
+public class GoogleBookService {
 
     @Value("${google.book.api.url}")
     private String googleBookApiURL;
@@ -25,7 +26,7 @@ public class GoogleBooksService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final Logger log = LoggerFactory.getLogger(GoogleBooksService.class);
+    private static final Logger log = LoggerFactory.getLogger(GoogleBookService.class);
 
     public List<BookModel> searchBooks(String searchKey, CountDownLatch latch){
         long startTime = System.nanoTime();
@@ -35,15 +36,23 @@ public class GoogleBooksService {
         searchUrl.append(searchKey);
 
         ResponseEntity<Books> responseEntity = restTemplate.getForEntity(searchUrl.toString(), Books.class);
-        List<BookModel> response = responseEntity.getBody().getBooks().stream()
-                .map(book -> BookAlbumUtils.convertBookToBookModel(book))
-                .collect(Collectors.toList());
+        List<BookModel> response = processResponse(responseEntity);
 
         log.info(String.format("Finished searchBooks at %s. Executed in %s millis.",
                 LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
         latch.countDown();
 
         return response;
+    }
+
+    private List<BookModel> processResponse(ResponseEntity<Books> response){
+        List<BookModel> bookModelList = new ArrayList<>();
+        if (response.getBody() != null && response.getBody().getBooks() != null){
+            bookModelList = response.getBody().getBooks().stream()
+                    .map(book -> BookAlbumUtil.convertBookToBookModel(book))
+                    .collect(Collectors.toList());
+        }
+        return bookModelList;
     }
 
 }

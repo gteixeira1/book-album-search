@@ -3,7 +3,7 @@ package com.kramphub.executor;
 import com.kramphub.model.AlbumModel;
 import com.kramphub.model.BookModel;
 import com.kramphub.model.ItemModel;
-import com.kramphub.service.GoogleBooksService;
+import com.kramphub.service.GoogleBookService;
 import com.kramphub.service.ITunesAlbumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 public class ServiceExecutor {
 
     @Autowired
-    private GoogleBooksService googleBooksService;
+    private GoogleBookService googleBookService;
 
     @Autowired
     private ITunesAlbumService iTunesAlbumService;
@@ -46,7 +46,7 @@ public class ServiceExecutor {
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
         Callable<List<ItemModel>> googleTask = () -> {
-            googleBooksService.searchBooks(searchKey, latch).stream().forEach(book -> itemModelList.add(book));
+            googleBookService.searchBooks(searchKey, latch).stream().forEach(book -> itemModelList.add(book));
             return itemModelList;
         };
 
@@ -87,7 +87,7 @@ public class ServiceExecutor {
     public List<BookModel> searchBookThread(String searchKey, CountDownLatch latch){
         List<BookModel> bookModelList = new ArrayList<>();
         new Thread(
-                () -> googleBooksService.searchBooks(searchKey, latch).stream().forEach(book -> bookModelList.add(book))
+                () -> googleBookService.searchBooks(searchKey, latch).stream().forEach(book -> bookModelList.add(book))
         ).start();
         return bookModelList;
     }

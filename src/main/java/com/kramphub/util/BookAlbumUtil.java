@@ -1,4 +1,4 @@
-package com.kramphub.utils;
+package com.kramphub.util;
 
 import com.kramphub.domain.albums.Album;
 import com.kramphub.domain.books.Book;
@@ -8,7 +8,7 @@ import com.kramphub.model.BookModel;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BookAlbumUtils {
+public class BookAlbumUtil {
 
     public static BookModel convertBookToBookModel(Book book){
         BookModel bookModel = new BookModel();
