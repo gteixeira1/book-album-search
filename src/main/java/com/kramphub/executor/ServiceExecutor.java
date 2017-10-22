@@ -8,12 +8,11 @@ import com.kramphub.service.ITunesAlbumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 @Service
@@ -24,6 +23,9 @@ public class ServiceExecutor {
 
     @Autowired
     private ITunesAlbumService iTunesAlbumService;
+
+    @Value("${global.app.max.responseTime}")
+    public int appMaxResponseTime;
 
     private static final Logger log = LoggerFactory.getLogger(ServiceExecutor.class);
 
@@ -36,43 +38,28 @@ public class ServiceExecutor {
         CountDownLatch latch = new CountDownLatch(2);
         List<ItemModel> itemModelList = new ArrayList<>();
 
-//        Thread bookThread = new Thread(
-//                () -> googleBooksService.searchBooks(searchKey, latch).stream().forEach(book -> itemModelList.add(book))
-//        );
-//        Thread albumThread = new Thread(
-//                () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(album -> itemModelList.add(album))
-//        );
+        new Thread(
+                () -> googleBookService.searchBooks(searchKey, latch).stream().forEach(book -> itemModelList.add(book))
+        ).start();
+        new Thread(
+                () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(album -> itemModelList.add(album))
+        ).start();
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        latch.countDown();
+                        latch.countDown();
+                    }
+                }, appMaxResponseTime
+        );
 
-        Callable<List<ItemModel>> googleTask = () -> {
-            googleBookService.searchBooks(searchKey, latch).stream().forEach(book -> itemModelList.add(book));
-            return itemModelList;
-        };
-
-        Callable<List<ItemModel>> itunesTask = () -> {
-            iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(album -> itemModelList.add(album));
-            return itemModelList;
-        };
-
-        List<Callable<List<ItemModel>>> callableTasks = new ArrayList<>();
-        callableTasks.add(googleTask);
-        callableTasks.add(itunesTask);
-
-        try {
-            executor.invokeAll(callableTasks, 10, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        log.info("Shutdown executor. {}",executor.isTerminated());
-        executor.shutdown();
-        log.info("Finished executor. {}",executor.isTerminated());
-
-        log.info("Waiting all threads finish. {}",latch.getCount());
+        log.info("Waiting all threads finish.");
         try {
             latch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("Error on CountDownLatch.await. {}", e.getCause());
         }
         log.info("All threads finished.");
 
