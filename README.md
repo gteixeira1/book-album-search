@@ -21,15 +21,34 @@ To build the project using Maven, just run the maven command inside the project 
 ```sh
 mvn clean install
 ```
-To start the application, you just need to run the spring-boot::run with maven command:
+The application has specific properties separated per environment (dev, qa, prod). The default environment is dev.
+To start the application, you just need to run the spring-boot::run with environment information with maven command.
+Start for (*dev*) environment (default):
 ```sh
 mvn spring-boot::run
 ```
+Start for (*qa*) environment:
+```sh
+mvn spring-boot::run -Drun.jvmArguments="-Dspring.profiles.active=qa"
+```
+Start for (*prod*) environment:
+```sh
+mvn spring-boot::run -Drun.jvmArguments="-Dspring.profiles.active=prod"
+```
 You can also use the JAR file created by build command and start the application using a Java command.
 After the build has successfully executed, a new JAR (*book-album-search-0.0.1-SNAPSHOT.jar*) file will be created inside *'target'*.
-Then, to start the application using Java command, you just need to run the command:
+Then, to start the application using Java command, you just need to run the command.
+Start for (*dev*) environment (default):
 ```sh
 java -jar target/book-album-search-0.0.1-SNAPSHOT.jar
+```
+Start for (*qa*):
+```sh
+java -jar -Dspring.profiles.active=qa target/book-album-search-0.0.1-SNAPSHOT.jar
+```
+Start for (*prod*):
+```sh
+java -jar -Dspring.profiles.active=prod target/book-album-search-0.0.1-SNAPSHOT.jar
 ```
 
 ### Application Endpoints
@@ -40,13 +59,13 @@ java -jar target/book-album-search-0.0.1-SNAPSHOT.jar
 - URI Parameters: searchKey (required)
 
 ##### Search Books
-- Endpoint which perform only the search of books (only available on DEV environment)
+- Endpoint which perform only the search of books
 - URL: http://localhost:8080/book-album-search/api/v1/books?searchKey=jones
 - Method: GET
 - URI Parameters: searchKey (required)
 
 ##### Search Book/Album
-- Endpoint which perform only the search of albums (only available on DEV environment)
+- Endpoint which perform only the search of albums
 - URL: http://localhost:8080/book-album-search/api/v1/albums?searchKey=jones
 - Method: GET
 - URI Parameters: searchKey (required)
