@@ -1,11 +1,8 @@
-# book-album-search
-
-
 # Book/Album Search App
 
 ### Application Overview
-This App perform a search by books, on Google Books API, and albums, on iTunes API, by a searchKey and returns a single result to the user.
-It was created a REST service which receive this searchKey, provided by the user, as URI parameter and then perform the request for on each API to get the result.
+This App perform a web search of books, using Google Books API, and albums, using iTunes API, by a searchKey and returns a single result to the user.
+It was created a REST service which receive this searchKey, provided by the user, as URI parameter and then perform the request on each API to get the result.
 
 ### Application Configuration
   - Java 1.8_71
@@ -54,18 +51,16 @@ java -jar target/book-album-search-0.0.1-SNAPSHOT.jar
 - Method: GET
 - URI Parameters: searchKey (required)
 
-###### Sample Tests Endpoints
-```sh
-http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black
-http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black%20sabbath
-http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black%20sabbath%20iron
-http://localhost:8080/book-album-search/api/v1/book-album?searchKey=pink%20floyd%20mother
-http://localhost:8080/book-album-search/api/v1/book-album?searchKey=1qaz2wsx3edc4rfv
-http://localhost:8080/book-album-search/api/v1/albums?searchKey=andrea
-http://localhost:8080/book-album-search/api/v1/albums?searchKey=andrea%20bocelli
-http://localhost:8080/book-album-search/api/v1/books?searchKey=Hitchhiker%27s%20Guide
-http://localhost:8080/book-album-search/api/v1/books?searchKey=Uncharted
-```
+###### Sample Endpoint Tests
+* http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black
+* http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black%20sabbath
+* http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black%20sabbath%20iron
+* http://localhost:8080/book-album-search/api/v1/book-album?searchKey=pink%20floyd%20mother
+* http://localhost:8080/book-album-search/api/v1/book-album?searchKey=1qaz2wsx3edc4rfv
+* http://localhost:8080/book-album-search/api/v1/albums?searchKey=andrea
+* http://localhost:8080/book-album-search/api/v1/albums?searchKey=andrea%20bocelli
+* http://localhost:8080/book-album-search/api/v1/books?searchKey=Hitchhiker%27s%20Guide
+* http://localhost:8080/book-album-search/api/v1/books?searchKey=Uncharted
 
 ### Justification of Technology Choice
 It was decided to use (*Spring Boot*) framework for this application because it's very simple to use and implement REST service.
