@@ -28,9 +28,9 @@ public class BookAlbumUtilTest {
 
     public static BookModel buildBookModel(){
         BookModel book = new BookModel();
-        book.setTitle("Title");
+        book.setTitle("BookTitle");
         book.setKind("Book");
-        book.setAuthor("Author");
+        book.setAuthor("BookAuthor");
         return book;
     }
 
@@ -44,8 +44,8 @@ public class BookAlbumUtilTest {
         List<Book> bookList = new ArrayList<>();
         Book single = new Book();
         VolumeInfo volumeInfo = new VolumeInfo();
-        volumeInfo.setTitle("Title");
-        volumeInfo.setAuthors(Arrays.asList("Author"));
+        volumeInfo.setTitle("BookTitle");
+        volumeInfo.setAuthors(Arrays.asList("BookAuthor"));
         single.setKind("Book");
         single.setVolumeInfo(volumeInfo);
         bookList.add(single);
@@ -54,9 +54,9 @@ public class BookAlbumUtilTest {
 
     public static AlbumModel buildAlbumModel(){
         AlbumModel album = new AlbumModel();
-        album.setTitle("Title");
+        album.setTitle("AlbumTitle");
         album.setKind("Album");
-        album.setArtist("Artist");
+        album.setArtist("AlbumArtist");
         return album;
     }
 
@@ -64,8 +64,8 @@ public class BookAlbumUtilTest {
     public static Albums buildAlbums(){
         Albums albums = new Albums();
         Album single = new Album();
-        single.setArtistName("Artist");
-        single.setCollectionName("Album");
+        single.setArtistName("AlbumArtist");
+        single.setCollectionName("AlbumTitle");
         single.setCollectionType("Album");
         albums.setAlbums(Arrays.asList(single));
         return albums;
@@ -76,7 +76,7 @@ public class BookAlbumUtilTest {
         response.append("{\n");
         response.append(" \"resultCount\":1,\n");
         response.append(" \"results\": [\n");
-        response.append("{\"collectionType\":\"Album\", \"artistName\":\"Artist\", \"collectionName\":\"Title\"}\n");
+        response.append("{\"collectionType\":\"Album\", \"artistName\":\"AlbumArtist\", \"collectionName\":\"AlbumTitle\"}\n");
         response.append("]\n");
         response.append("}");
         return response.toString();

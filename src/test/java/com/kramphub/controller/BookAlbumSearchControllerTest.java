@@ -1,6 +1,6 @@
 package com.kramphub.controller;
 
-import com.kramphub.executor.ServiceExecutor;
+import com.kramphub.executor.BookAlbumServiceExecutor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class BookAlbumSearchControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ServiceExecutor executor;
+    private BookAlbumServiceExecutor executor;
 
     private final String basePath = "/book-album-search/api/v1";
 

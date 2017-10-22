@@ -1,6 +1,6 @@
 package com.kramphub.config;
 
-import com.kramphub.executor.ServiceExecutor;
+import com.kramphub.executor.BookAlbumServiceExecutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +27,8 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public ServiceExecutor getServiceExecutor(){
-        return new ServiceExecutor();
+    public BookAlbumServiceExecutor getServiceExecutor(){
+        return new BookAlbumServiceExecutor();
     }
 
 }

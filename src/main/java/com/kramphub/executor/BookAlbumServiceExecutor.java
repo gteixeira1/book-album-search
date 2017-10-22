@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.IntStream;
 
 @Service
-public class ServiceExecutor {
+public class BookAlbumServiceExecutor {
 
     @Autowired
     private GoogleBookService googleBookService;
@@ -28,35 +28,32 @@ public class ServiceExecutor {
     @Value("${global.app.max.responseTime}")
     public int appMaxResponseTime;
 
-    private static final Logger log = LoggerFactory.getLogger(ServiceExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(BookAlbumServiceExecutor.class);
 
-    public ServiceExecutor(){}
+    private CountDownLatch latch;
+
+    private List<ItemModel> itemModelList;
+
+    public BookAlbumServiceExecutor(){}
 
     public List<ItemModel> searchItems(String searchKey){
         long startTime = System.nanoTime();
         log.info(String.format("Started searchItems at %s.", LocalDateTime.now()));
 
-        CountDownLatch latch = new CountDownLatch(2);
-        List<ItemModel> itemModelList = new ArrayList<>();
+        latch = new CountDownLatch(2);
+        itemModelList = new ArrayList<>();
 
         new Thread(
-                () -> googleBookService.searchBooks(searchKey, latch).stream().forEach(book -> itemModelList.add(book))
+                () -> googleBookService.searchBooks(searchKey, latch).stream().forEach(itemModelList::add)
         ).start();
         new Thread(
-                () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(album -> itemModelList.add(album))
+                () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(itemModelList::add)
         ).start();
 
-        startTimerScheduler(latch,2);
+        startTimerScheduler(2);
+        countDownLatchAwait();
 
-        log.info("Waiting all threads finish.");
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            log.error("Error on CountDownLatch.await. {}", e.getCause());
-        }
-        log.info("All threads finished.");
-
-        itemModelList.sort(Comparator.comparing(ItemModel::getTitle,Comparator.nullsFirst(Comparator.naturalOrder())));
+        processItemModelListResponse();
 
         log.info(String.format("Finished searchItems at %s. Executed in %s millis.",
                 LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
@@ -64,17 +61,18 @@ public class ServiceExecutor {
         return itemModelList;
     }
 
-    public List<BookModel> searchBookThread(String searchKey, CountDownLatch latch){
+    public List<BookModel> searchBookThread(String searchKey){
         long startTime = System.nanoTime();
         log.info(String.format("Started searchBookThread at %s.", LocalDateTime.now()));
 
         List<BookModel> bookModelList = new ArrayList<>();
+        latch = new CountDownLatch(1);
         new Thread(
-                () -> googleBookService.searchBooks(searchKey, latch).stream().forEach(book -> bookModelList.add(book))
+                () -> googleBookService.searchBooks(searchKey, latch).stream().forEach(bookModelList::add)
         ).start();
 
-        startTimerScheduler(latch,1);
-        startCountDownLatch(latch);
+        startTimerScheduler(1);
+        countDownLatchAwait();
 
         log.info(String.format("Finished searchBookThread at %s. Executed in %s millis.",
                 LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
@@ -82,17 +80,18 @@ public class ServiceExecutor {
         return bookModelList;
     }
 
-    public List<AlbumModel> searchAlbumThread(String searchKey, CountDownLatch latch){
+    public List<AlbumModel> searchAlbumThread(String searchKey){
         long startTime = System.nanoTime();
         log.info(String.format("Started searchAlbumThread at %s.", LocalDateTime.now()));
 
         List<AlbumModel> albumModelList = new ArrayList<>();
+        latch = new CountDownLatch(1);
         new Thread(
-                () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(album -> albumModelList.add(album))
+                () -> iTunesAlbumService.searchAlbums(searchKey, latch).stream().forEach(albumModelList::add)
         ).start();
 
-        startTimerScheduler(latch,1);
-        startCountDownLatch(latch);
+        startTimerScheduler(1);
+        countDownLatchAwait();
 
         log.info(String.format("Finished searchAlbumThread at %s. Executed in %s millis.",
                 LocalDateTime.now(), (System.nanoTime() - startTime)/ 1_000_000));
@@ -100,7 +99,7 @@ public class ServiceExecutor {
         return albumModelList;
     }
 
-    private void startTimerScheduler(CountDownLatch latch, int threadCount){
+    private void startTimerScheduler(int threadCount){
         new Timer().schedule(
                 new TimerTask() {
                     @Override
@@ -111,12 +110,27 @@ public class ServiceExecutor {
         );
     }
 
-    private void startCountDownLatch(CountDownLatch latch){
+    private void countDownLatchAwait(){
+        log.info("Waiting thread finish. {}", latch.getCount());
         try {
             latch.await();
         } catch (InterruptedException e) {
             log.error("Error on CountDownLatch.await. {}", e.getCause());
         }
+        log.info("Thread finished. {}",latch.getCount());
+    }
+
+    private List<ItemModel> processItemModelListResponse(){
+        List<ItemModel> response = itemModelList;
+        try{
+            if (itemModelList.size() > 0){
+                itemModelList.sort(Comparator.comparing(ItemModel::getTitle,Comparator.nullsLast(Comparator.naturalOrder())));
+            }
+            response = itemModelList;
+        } catch (NullPointerException e){
+            log.error("Error while sorting ItemModelList. Returning unsorted result.");
+        }
+        return response;
     }
 
 }
