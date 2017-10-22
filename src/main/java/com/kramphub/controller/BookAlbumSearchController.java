@@ -32,13 +32,11 @@ public class BookAlbumSearchController {
     }
 
     @RequestMapping(path = "/books", method = RequestMethod.GET, params = {"searchKey!="})
-    @Profile("dev")
     public ResponseEntity<List<BookModel>> getBooks(@RequestParam("searchKey") String searchKey){
         return new ResponseEntity<List<BookModel>>(bookAlbumServiceExecutor.searchBookThread(searchKey), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/albums", method = RequestMethod.GET, params = {"searchKey!="})
-    @Profile("dev")
     public ResponseEntity<List<AlbumModel>> getAlbums(@RequestParam("searchKey") String searchKey){
         return new ResponseEntity<List<AlbumModel>>(bookAlbumServiceExecutor.searchAlbumThread(searchKey), HttpStatus.OK);
     }
