@@ -51,7 +51,7 @@ java -jar target/book-album-search-0.0.1-SNAPSHOT.jar
 - Method: GET
 - URI Parameters: searchKey (required)
 
-###### Sample Endpoint Tests
+### Sample Endpoint Tests
 * http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black
 * http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black%20sabbath
 * http://localhost:8080/book-album-search/api/v1/book-album?searchKey=black%20sabbath%20iron
