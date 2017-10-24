@@ -17,7 +17,7 @@ It was created a REST service which receive this searchKey, provided by the user
   - Health Check are required
 
 ### Application Build / Start
-##### Build / Start using Maven
+##### Building / Starting using Maven
 This application was built using Spring Boot framework and it was used Maven as a project library manager.
 To build the project using Maven, just run the maven command inside the project home directory:
 ```sh
@@ -38,7 +38,7 @@ Start command for **prod** environment:
 ```sh
 mvn spring-boot::run -Drun.jvmArguments="-Dspring.profiles.active=prod"
 ```
-##### Build / Start using Java
+##### Starting using Java
 You can also use the JAR file created by build command and start the application using a Java command.
 After the build has successfully executed, a new JAR (*book-album-search-0.0.1-SNAPSHOT.jar*) file will be created inside *'target'*.
 Then, to start the application using Java command, you just need to run the command.
