@@ -15,6 +15,7 @@ It was created a REST service which receive this searchKey, provided by the user
   - The application has a response time limit of 1 minute.
   - The result is ordered by Title
   - Health Check are required
+  - Metrics and response time must exists on each service
 
 ### Application Build / Start
 #### Building / Starting using Maven
@@ -102,3 +103,11 @@ It was also used the online website **http://www.jsonschema2pojo.org/** to extra
 This site generate automatically the classes based on a sample data provided.
 It was provided a response sample from Google Books API and from iTunes API to generate all domain classes.
 All classes and attributes which aren't used were removed from the project.
+Regarding the independence of each service, to accomplish this functional requirement,
+I've added a **Thread** for each call to external API and added a TimerScheduler in the main **Thread**
+to return the result to the client independent if the API requests has already respond or not.
+With this, the main service will not be impacted by the external API requests and each API request are independent.
+To test this with more accuracy, I suggest to reduce the application property **global.app.max.responseTime** to 500
+and then you guys will see some results with only albums, other results with albums and books and other empty results.
+This is due the API response time. Once we don't have control over the API response time, it's random.
+You can verify each API response time in the applications logs.
