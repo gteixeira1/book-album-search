@@ -56,19 +56,19 @@ java -jar -Dspring.profiles.active=prod target/book-album-search-0.0.1-SNAPSHOT.
 ```
 
 ### Application Endpoints
-##### Search Book/Album
+#### Search Book/Album
 - Endpoint which perform the search of books and albums
 - URL: http://localhost:8080/book-album-search/api/v1/book-album?searchKey=jones
 - Method: GET
 - URI Parameters: searchKey (required)
 
-##### Search Books
+#### Search Books
 - Endpoint which perform only the search of books
 - URL: http://localhost:8080/book-album-search/api/v1/books?searchKey=jones
 - Method: GET
 - URI Parameters: searchKey (required)
 
-##### Search Book/Album
+#### Search Book/Album
 - Endpoint which perform only the search of albums
 - URL: http://localhost:8080/book-album-search/api/v1/albums?searchKey=jones
 - Method: GET
