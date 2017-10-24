@@ -14,6 +14,7 @@ It was created a REST service which receive this searchKey, provided by the user
   - Each API request is independent and cannot be impacted by the process of the other API;
   - The application has a response time limit of 1 minute.
   - The result is ordered by Title
+  - Health Check are required
 
 ### Application Build / Start
 This application was built using Spring Boot framework and it was used Maven as a project library manager.
@@ -91,7 +92,10 @@ For **prod**, only bellow endpoints are available (configurable on application.p
 * http://localhost:8080/loggers
 
 ### Justification of Technology Choice
-It was decided to use **Spring Boot** framework for this application because it's very simple to use and implement REST service.
+It was decided to use **Spring Boot** framework for this application because it's very simple to use and implement REST services.
 Spring Boot has a embedded container which we can easily start a HTTP endpoint.
-Also, I'm already working with Spring Boot and for this reason I' very familiar with this framework.
-
+Also, I'm currently working with Spring Boot and for this reason I'm very familiar with this framework.
+It was also used the online website **http://www.jsonschema2pojo.org/** to extract all domain classes used by this application.
+This site generate automatically the classes based on a sample data provided.
+It was provided a response sample from Google Books API and from iTunes API to generate all domain classes.
+All classes and attributes which aren't used were removed from the project.

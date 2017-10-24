@@ -123,9 +123,7 @@ public class BookAlbumServiceExecutor {
     private List<ItemModel> processItemModelListResponse(){
         List<ItemModel> response = itemModelList;
         try{
-            if (itemModelList.size() > 0){
-                itemModelList.sort(Comparator.comparing(ItemModel::getTitle,Comparator.nullsLast(Comparator.naturalOrder())));
-            }
+            itemModelList.sort(Comparator.comparing(ItemModel::getTitle,Comparator.nullsLast(Comparator.naturalOrder())));
             response = itemModelList;
         } catch (NullPointerException e){
             log.error("Error while sorting ItemModelList. Returning unsorted result.");
